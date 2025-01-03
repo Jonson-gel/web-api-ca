@@ -6,6 +6,7 @@ import movies from './movies';
 import User from '../api/users/userModel';
 import Movie from '../api/movies/movieModel';
 import Favorite from '../api/favorites/favoriteModel';
+import FavoriteActorModel from '../api/favoriteActor/favoriteActorModel';
 
 async function main() {
     if (process.env.NODE_ENV !== 'development') {
@@ -19,6 +20,7 @@ async function main() {
     await User.create(users);
     await Movie.create(movies);
     await Favorite.create();
+    await FavoriteActorModel.create();
     console.log('Database initialised');
     console.log(`${users.length} users loaded`);
     console.log(`${movies.length} movies loaded`);
