@@ -48,9 +48,10 @@ router.get('/tmdb/genres', asyncHandler(async (req, res) => {
     res.status(200).json(genres);
 }));
 
-router.get('/reviews/:id', asyncHandler(async (req, res) => {
-    const reviews = await getGenres();
-    res.status(200).json(reviews);
+router.get('/tmdb/reviews/:id', asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const movieGenres = await getMovieReviews(id);
+    res.status(200).json(movieGenres);
 }));
 
 export default router;
