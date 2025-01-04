@@ -13,6 +13,8 @@ import { getMovieActors } from "../../api/tmdb-api";
 import { useQuery } from "react-query";
 import Spinner from '../spinner';
 import { Link } from "react-router-dom";
+import MovieGenres from "../movieGenres";
+import { getGenre } from "../../api/movies-api";
 
 const root = {
     display: "flex",
@@ -42,6 +44,8 @@ const MovieDetails = ({ movie }) => {
 
     const actors = data.cast || [];
 
+    
+
     return (
         <>
             <Typography variant="h4" component="h3" fontWeight="bold">
@@ -62,19 +66,17 @@ const MovieDetails = ({ movie }) => {
                 <li>
                     <Chip label={movie.adult?"Limited":"Unlimited"} sx={{ ...chip }} />
                 </li>
-                {movie.genres.map((g) => (
-                    <li key={g.name}>
-                        <Chip label={g.name} sx={{ ...chip }} />
+                {/* {movie.genre_ids.map((genre_id) => (
+                    
+                    <li>
+                        <Chip label={genre.name} sx={{ ...chip }} />
                     </li>
-                ))}
+                ))} */}
+                {/* <MovieGenres ids={movie.genre_ids} /> */}
             </Paper>
 
             <Paper component="ul" sx={{ ...root }}>
                 <Chip icon={<AccessTimeIcon />} label={`${movie.runtime} min.`} />
-                <Chip
-                    icon={<MonetizationIcon />}
-                    label={`${movie.revenue.toLocaleString()}`}
-                />
                 <Chip
                     icon={<StarRate />}
                     label={`${movie.vote_average} (${movie.vote_count}`}
