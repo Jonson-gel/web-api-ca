@@ -42,13 +42,34 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-async function registerUser(req, res) {
-    // Add input validation logic here
+const validatePassword = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
+};
+
+router.post('/signup', asyncHandler(async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password are required.' });
+    }
+
+    if (!validatePassword(password)) {
+        return res.status(400).json({
+            success: false, msg: 'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.'
+        });
+    } 
+
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+        return res.status(409).json({ message: 'Username is already created.' });
+    }
+
     await User.create(req.body);
     res.status(201).json({ success: true, msg: 'User successfully created.' });
-}
+}));
 
-async function authenticateUser(req, res) {
+router.post('/login', asyncHandler(async (req, res) => {
     const user = await User.findByUserName(req.body.username);
     if (!user) {
         return res.status(401).json({ success: false, msg: 'Authentication failed. User not found.' });
@@ -61,6 +82,6 @@ async function authenticateUser(req, res) {
     } else {
         res.status(401).json({ success: false, msg: 'Wrong password.' });
     }
-}
+}));
 
 export default router;
