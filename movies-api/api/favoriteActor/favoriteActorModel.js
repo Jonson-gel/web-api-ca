@@ -2,13 +2,13 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const FavouriteActorSchema = new Schema({
+const FavoriteActorSchema = new Schema({
     userId: {type: String, required: true},
     actorId: {type: String, required: true},
 });
 
-FavouriteActorSchema.statics.findByMovieDBId = function (id) {
+FavoriteActorSchema.statics.findByMovieDBId = function (id) {
   return this.findOne({ id: id });
 };
 
-export default mongoose.model('Favourites', FavouriteActorSchema);
+export default mongoose.model('FavoriteActors', FavoriteActorSchema);
