@@ -49,3 +49,51 @@ export const getMovies = () => {
       throw error
    });
   };
+
+  export const getUpcomingMovies = () => {
+    return fetch(
+      `http://localhost:8080/api/movies/tmdb/upcoming`
+    ).then( (response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      throw error
+   });
+  };
+
+  export const getPopularMovies = () => {
+    return fetch(
+      `http://localhost:8080/api/movies/tmdb/popular`
+    ).then( (response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      throw error
+   });
+  };
+
+  export const getNowPlayingMovies = () => {
+    return fetch(
+      `http://localhost:8080/api/movies/tmdb/nowPlaying`
+    ).then( (response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      throw error
+   });
+  };
