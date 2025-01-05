@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Button, TextField, Typography, Box, Grid, Link } from "@mui/material";
 import { login } from "../../api/movies-api";
+import { useAuth } from "../../contexts/authContext"
 
 const Login = ({ onRegister }) => {
+  const { authLogin, authLogout } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("authToken"));
 
-  const handleSubmit = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
 
     if (!username || !password) {
@@ -16,11 +19,19 @@ const Login = ({ onRegister }) => {
 
     try {
       const response = await login({ username, password });
-      alert("Login successful!");
-      console.log("Token:", response.token);
+      localStorage.setItem("authToken", response.token);
+      setIsLoggedIn(true);
+      authLogin(response.token);
     } catch (error) {
       alert(error.message);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    authLogout();
+    setIsLoggedIn(false);
+    alert("You have been logged out.");
   };
 
   return (
@@ -35,7 +46,7 @@ const Login = ({ onRegister }) => {
       <Grid item xs={3}>
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          onSubmit={handleLogin}
           noValidate
           sx={{
             display: "flex",
@@ -49,45 +60,66 @@ const Login = ({ onRegister }) => {
             backgroundColor: "#fff",
           }}
         >
-          <Typography variant="h4" align="center" gutterBottom>
-            Login
-          </Typography>
+          {isLoggedIn ? (
+            <>
+              <Typography variant="h5" align="center" gutterBottom>
+                Welcome Back!
+              </Typography>
+              <Typography variant="body1" align="center" gutterBottom>
+                You are already logged in.
+              </Typography>
+              <Button 
+                onClick={handleLogout} 
+                variant="contained" 
+                color="secondary" 
+                fullWidth
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Typography variant="h4" align="center" gutterBottom>
+                Login
+              </Typography>
 
-          <TextField
-            label="Username"
-            variant="outlined"
-            fullWidth
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <TextField
-            label="Password"
-            variant="outlined"
-            type="password"
-            fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+              <TextField
+                label="Username"
+                variant="outlined"
+                fullWidth
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+              <TextField
+                label="Password"
+                variant="outlined"
+                type="password"
+                fullWidth
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
 
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            Login
-          </Button>
+              <Button type="submit" variant="contained" color="primary" fullWidth>
+                Login
+              </Button>
 
-          <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
-            Don't have an account?{" "}
-            <Link
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                onRegister();
-              }}
-            >
-              Register
-            </Link>
-            {" "}here
-          </Typography>
+              <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
+                Don't have an account?{" "}
+                <Link
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onRegister();
+                  }}
+                >
+                  Register
+                </Link>{" "}
+                here
+              </Typography>
+            </>
+          )}
         </Box>
       </Grid>
     </Grid>
@@ -95,6 +127,7 @@ const Login = ({ onRegister }) => {
 };
 
 export default Login;
+
 
 // import React, { useEffect, useState } from 'react';
 // import { getToken, createSession } from '../../api/tmdb-api';

@@ -4,27 +4,27 @@ import Favorite from './favoriteModel';
 
 const router = express.Router();
 
-router.get('/:userId', asyncHandler(async (req, res) => {
-    const { userId } = req.params;
-    const favorites = await Favorite.find({ userId });
+router.get('/:username', asyncHandler(async (req, res) => {
+    const { username } = req.params;
+    const favorites = await Favorite.find({ username });
     res.status(200).json(favorites);
 }));
 
-router.post('/:userId', asyncHandler(async (req, res) => {
+router.post('/:username', asyncHandler(async (req, res) => {
     try {
-        const { userId } = req.params; 
+        const { username } = req.params; 
         const { movieId } = req.body;
 
-        if (!userId || !movieId) {
-            return res.status(400).json({ success: false, msg: 'UserId and MovieId are required.' });
+        if (!username || !movieId) {
+            return res.status(400).json({ success: false, msg: 'Username and MovieId are required.' });
         }
 
-        const existingFavorite = await Favorite.findOne({ userId, movieId });
+        const existingFavorite = await Favorite.findOne({ username, movieId });
         if (existingFavorite) {
             return res.status(400).json({ message: 'This movie is already in favorites.' });
         }
 
-        await Favorite.create({ userId, movieId });
+        await Favorite.create({ username, movieId });
         res.status(200).json({ success: true, msg: 'Favorite successfully created.' });
     } catch (error) {
         console.error(error);
@@ -32,16 +32,16 @@ router.post('/:userId', asyncHandler(async (req, res) => {
     }
 }));
 
-router.delete('/:userId', asyncHandler(async (req, res) => {
+router.delete('/:username', asyncHandler(async (req, res) => {
     try {
-        const { userId } = req.params; 
-        const { favoriteId } = req.body;
+        const { username } = req.params; 
+        const { movieId } = req.body;
 
-        if (!userId || !favoriteId) {
-            return res.status(400).json({ success: false, msg: 'UserId and favoriteId are required.' });
+        if (!username || !movieId) {
+            return res.status(400).json({ success: false, msg: 'Username and favoriteId are required.' });
         }
 
-        const deletedFavorite = await Favorite.findByIdAndDelete(favoriteId);
+        const deletedFavorite = await Favorite.findOneAndDelete({ username, movieId });
         if (!deletedFavorite) {
             return res.status(404).json({ message: 'Favorite movie can not be found.' });
         }

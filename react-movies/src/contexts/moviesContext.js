@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { addToFavorite, deleteFromFavorite } from "../api/movies-api";
 
 export const MoviesContext = React.createContext(null);
 
 const MoviesContextProvider = (props) => {
+  const username = sessionStorage.getItem("username");
   const [favorites, setFavorites] = useState( [] )
   const [myReviews, setMyReviews] = useState( {} ) 
   const [mustwatch, setMustwatch] = useState( [] )
@@ -16,7 +18,8 @@ const MoviesContextProvider = (props) => {
     else{
       newFavorites = [...favorites];
     }
-    setFavorites(newFavorites)
+    setFavorites(newFavorites);
+    addToFavorite(username, movie.id);
   };
 
   const addToMustWatch = (movie) => {
@@ -34,6 +37,7 @@ const MoviesContextProvider = (props) => {
     setFavorites( favorites.filter(
       (mId) => mId !== movie.id
     ) )
+    deleteFromFavorite(username, movie.id)
   };
 
   const removeFromMustWatch = (movie) => {
