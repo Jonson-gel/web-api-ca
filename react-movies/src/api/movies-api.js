@@ -186,9 +186,9 @@ export const deleteFromFavorite = async ({ username, movieId }) => {
     });
 };
 
-export const getFavorite = async ({ username, movieId }) => {
+export const getFavorite = async ({ username }) => {
   return fetch(
-    `http://localhost:8080/api/favorites/${username}`
+    `http://localhost:8080/api/favorites/${username}`, {}, true
   ).then((response) => {
     if (!response.ok) {
       return response.json().then((error) => {

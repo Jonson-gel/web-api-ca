@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { addToFavorite, deleteFromFavorite } from "../api/movies-api";
+import React, { useState, useEffect } from "react";
+import { addToFavorite, deleteFromFavorite, getFavorite } from "../api/movies-api";
 
 export const MoviesContext = React.createContext(null);
 
@@ -19,8 +19,22 @@ const MoviesContextProvider = (props) => {
       newFavorites = [...favorites];
     }
     setFavorites(newFavorites);
-    addToFavorite(username, movie.id);
+    addToFavorite({ username, movieId: movie.id });
   };
+
+  useEffect(() => {
+    const fetchFavoriteMovies = async () => {
+      if (!username) return;
+      try {
+        const data = await getFavorite({ username });
+        const movieIds = data.map((movie) => movie.movieId);
+        setFavorites(movieIds);
+      } catch (error) {
+        console.error("Error fetching favorite movies:", error);
+      }
+    };
+    fetchFavoriteMovies();
+  }, [favorites, username]);
 
   const addToMustWatch = (movie) => {
     let newMustWatch = [];
