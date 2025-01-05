@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addToFavorite, deleteFromFavorite, getFavorite } from "../api/movies-api";
+import { addToFavorite, deleteFromFavorite, deleteFromFavoriteActors, getFavorite } from "../api/movies-api";
 
 export const MoviesContext = React.createContext(null);
 
@@ -36,6 +36,26 @@ const MoviesContextProvider = (props) => {
     fetchFavoriteMovies();
   }, [favorites, username]);
 
+  
+  const addToFavoriteActors = (actor) => {
+    let newFavoriteActors = [];
+    if (!favoriteActors.includes(actor.id)){
+      newFavoriteActors = [...favoriteActors, actor.id];
+    }
+    else{
+      newFavoriteActors = [...favoriteActors];
+    }
+    setFavoriteActors(newFavoriteActors)
+    addToFavoriteActors({ username, actorId: actor.id });
+  };
+
+  const removeFromFavoriteActors = (actor) => {
+    setFavoriteActors( favoriteActors.filter(
+      (mId) => mId !== actor.id
+    ) )
+    deleteFromFavoriteActors({username, actorId: actor.id});
+  };
+
   const addToMustWatch = (movie) => {
     let newMustWatch = [];
     if (!mustwatch.includes(movie.id)){
@@ -51,7 +71,7 @@ const MoviesContextProvider = (props) => {
     setFavorites( favorites.filter(
       (mId) => mId !== movie.id
     ) )
-    deleteFromFavorite(username, movie.id)
+    deleteFromFavorite({username, movieId: movie.id})
   };
 
   const removeFromMustWatch = (movie) => {
@@ -62,24 +82,6 @@ const MoviesContextProvider = (props) => {
 
   const addReview = (movie, review) => {
     setMyReviews( {...myReviews, [movie.id]: review } )
-  };
-
-  const addToFavoriteActors = (actor) => {
-    let newFavoriteActors = [];
-    if (!favoriteActors.includes(actor.id)){
-      newFavoriteActors = [...favoriteActors, actor.id];
-    }
-    else{
-      newFavoriteActors = [...favoriteActors];
-    }
-    setFavoriteActors(newFavoriteActors)
-    console.log(favoriteActors);
-  };
-
-  const removeFromFavoriteActors = (actor) => {
-    setFavoriteActors( favoriteActors.filter(
-      (mId) => mId !== actor.id
-    ) )
   };
 
   return (

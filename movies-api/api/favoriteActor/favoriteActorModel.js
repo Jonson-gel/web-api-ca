@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const FavoriteActorSchema = new Schema({
-    userId: {type: String, required: true},
+    username: {type: String, required: true},
     actorId: {type: String, required: true},
 });
 

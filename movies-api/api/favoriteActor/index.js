@@ -4,27 +4,27 @@ import FavoriteActor from './favoriteActorModel';
 
 const router = express.Router();
 
-router.get('/:userId', asyncHandler(async (req, res) => {
-    const { userId } = req.params;
-    const favoriteActors = await FavoriteActor.find({ userId });
+router.get('/:username', asyncHandler(async (req, res) => {
+    const { username } = req.params;
+    const favoriteActors = await FavoriteActor.find({ username });
     res.status(200).json(favoriteActors);
 }));
 
-router.post('/:userId', asyncHandler(async (req, res) => {
+router.post('/:username', asyncHandler(async (req, res) => {
     try {
-        const { userId } = req.params; 
+        const { username } = req.params; 
         const { movieId } = req.body;
 
-        if (!userId || !movieId) {
-            return res.status(400).json({ success: false, msg: 'UserId and MovieId are required.' });
+        if (!username || !movieId) {
+            return res.status(400).json({ success: false, msg: 'Username and MovieId are required.' });
         }
 
-        const existingFavoriteActor = await FavoriteActor.findOne({ userId, movieId });
+        const existingFavoriteActor = await FavoriteActor.findOne({ username, movieId });
         if (existingFavoriteActor) {
             return res.status(400).json({ message: 'This movie is already in favorite actors.' });
         }
 
-        await FavoriteActor.create({ userId, movieId });
+        await FavoriteActor.create({ username, movieId });
         res.status(200).json({ success: true, msg: 'Favorite actor successfully created.' });
     } catch (error) {
         console.error(error);
@@ -32,13 +32,13 @@ router.post('/:userId', asyncHandler(async (req, res) => {
     }
 }));
 
-router.delete('/:userId', asyncHandler(async (req, res) => {
+router.delete('/:username', asyncHandler(async (req, res) => {
     try {
-        const { userId } = req.params; 
+        const { username } = req.params; 
         const { favoriteActorId } = req.body;
 
-        if (!userId || !favoriteActorId) {
-            return res.status(400).json({ success: false, msg: 'UserId and favoriteActorId are required.' });
+        if (!username || !favoriteActorId) {
+            return res.status(400).json({ success: false, msg: 'Username and favoriteActorId are required.' });
         }
 
         const deletedFavoriteActor = await Favorite.findByIdAndDelete(favoriteActorId);

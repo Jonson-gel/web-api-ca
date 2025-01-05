@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import PageTemplate from "../components/templateFavoriteActorPage";
 import { useQueries } from "react-query";
-import { getActor } from "../api/tmdb-api";
+import { getFavoriteActors } from "../api/movies-api";
 import Spinner from "../components/spinner";
 import { MoviesContext } from "../contexts/moviesContext";
 import { Grid } from "@mui/material";
@@ -18,7 +18,7 @@ const FavoriteActorsPage = () => {
     actorIds.map((actorId) => {
       return {
         queryKey: ["movie", { id: actorId }],
-        queryFn: getActor,
+        queryFn: getFavoriteActors,
       };
     })
   );
