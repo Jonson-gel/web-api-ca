@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Button, TextField, Typography, Box, Grid, Link } from "@mui/material";
+import { login } from "../../api/movies-api";
 
-const Login = ({ onLogin, onRegister }) => {
+const Login = ({ onRegister }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!username || !password) {
@@ -13,7 +14,13 @@ const Login = ({ onLogin, onRegister }) => {
       return;
     }
 
-    onLogin({ username, password });
+    try {
+      const response = await login({ username, password });
+      alert("Login successful!");
+      console.log("Token:", response.token);
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (

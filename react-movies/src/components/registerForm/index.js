@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Button, TextField, Typography, Box, Grid, Link } from "@mui/material";
+import { signup } from "../../api/movies-api";
 
-const Register = ({ onRegister, onLogin }) => {
+const Register = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!username || !password || !confirmPassword) {
@@ -19,7 +20,13 @@ const Register = ({ onRegister, onLogin }) => {
       return;
     }
 
-    onRegister({ username, password });
+    try {
+      await signup({ username, password });
+      alert("Registration successful! You can log in now.");
+      onLogin();
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (

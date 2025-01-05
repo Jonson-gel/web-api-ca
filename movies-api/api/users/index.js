@@ -47,7 +47,7 @@ const validatePassword = (password) => {
     return regex.test(password);
 };
 
-router.post('/signup', asyncHandler(async (req, res) => {
+async function registerUser(req, res) {
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -67,9 +67,9 @@ router.post('/signup', asyncHandler(async (req, res) => {
 
     await User.create(req.body);
     res.status(201).json({ success: true, msg: 'User successfully created.' });
-}));
+};
 
-router.post('/login', asyncHandler(async (req, res) => {
+async function authenticateUser(req, res) {
     const user = await User.findByUserName(req.body.username);
     if (!user) {
         return res.status(401).json({ success: false, msg: 'Authentication failed. User not found.' });
@@ -82,6 +82,6 @@ router.post('/login', asyncHandler(async (req, res) => {
     } else {
         res.status(401).json({ success: false, msg: 'Wrong password.' });
     }
-}));
+};
 
 export default router;
