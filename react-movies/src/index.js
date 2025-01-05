@@ -20,6 +20,7 @@ import { AuthProvider } from "./contexts/authContext";
 import ProtectedRoute from "./protectedRoute";
 import LoginPage from "./pages/loginPage"
 import FavoriteActorsPage from "./pages/favoriteActorsPage";
+import RegisterPage from "./pages/registerPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +43,7 @@ const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="*" element={<Navigate to="/" />} />
               <Route path="/movies/login" element={<LoginPage />} />
+              <Route path="/movies/register" element={<RegisterPage />} />
               <Route path="/movies/favorites" element={<ProtectedRoute><FavoriteMoviesPage /></ProtectedRoute>} />
               <Route path="/reviews/:id" element={<ProtectedRoute><MovieReviewPage /></ProtectedRoute>} />
               <Route path="/movies/:id" element={<ProtectedRoute><MoviePage /></ProtectedRoute>} />
