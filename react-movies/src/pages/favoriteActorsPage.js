@@ -29,10 +29,10 @@ const FavoriteActorsPage = () => {
     return <Spinner />;
   }
 
-  const actors = favoriteActorsQueries.map((q) => {
-    q.data.genre_ids = q.data.also_known_as.map((g) => g.id);
-    return q.data;
-  });
+  // const actors = favoriteActorsQueries.map((q) => {
+  //   q.data.genre_ids = q.data.also_known_as.map((g) => g.id);
+  //   return q.data;
+  // });
 
   const handleChange = (type, value) => {
     if (type === "name") setNameFilter(value);

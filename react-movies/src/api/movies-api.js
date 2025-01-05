@@ -202,7 +202,9 @@ export const getFavorite = async ({ username }) => {
     });
 };
 
-export const addToFavoriteActors = async ({ username, actorId }) => {
+export const addToFavoriteActor = async ({ username, actorId }) => {
+  console.log(username);
+  console.log(actorId);
   return fetch(
     `http://localhost:8080/api/favoriteActors/${username}`, {
     method: "POST",

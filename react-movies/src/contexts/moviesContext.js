@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { addToFavorite, deleteFromFavorite, deleteFromFavoriteActors, getFavorite } from "../api/movies-api";
+import { addToFavorite, deleteFromFavorite, deleteFromFavoriteActors,
+  getFavorite, getFavoriteActors, addToFavoriteActor } from "../api/movies-api";
 
 export const MoviesContext = React.createContext(null);
 
@@ -46,7 +47,7 @@ const MoviesContextProvider = (props) => {
       newFavoriteActors = [...favoriteActors];
     }
     setFavoriteActors(newFavoriteActors)
-    addToFavoriteActors({ username, actorId: actor.id });
+    addToFavoriteActor({ username, actorId: actor.id });
   };
 
   const removeFromFavoriteActors = (actor) => {
@@ -55,6 +56,20 @@ const MoviesContextProvider = (props) => {
     ) )
     deleteFromFavoriteActors({username, actorId: actor.id});
   };
+
+  useEffect(() => {
+    const fetchFavoriteActors = async () => {
+      if (!username) return;
+      try {
+        const data = await getFavoriteActors({ username });
+        const actorIds = data.map((actor) => actor.actorId);
+        setFavorites(actorIds);
+      } catch (error) {
+        console.error("Error fetching favorite actors:", error);
+      }
+    };
+    fetchFavoriteActors();
+  }, [favoriteActors, username]);
 
   const addToMustWatch = (movie) => {
     let newMustWatch = [];

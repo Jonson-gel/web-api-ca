@@ -13,18 +13,18 @@ router.get('/:username', asyncHandler(async (req, res) => {
 router.post('/:username', asyncHandler(async (req, res) => {
     try {
         const { username } = req.params; 
-        const { movieId } = req.body;
+        const { actorId } = req.body;
 
-        if (!username || !movieId) {
-            return res.status(400).json({ success: false, msg: 'Username and MovieId are required.' });
+        if (!username || !actorId) {
+            return res.status(400).json({ success: false, msg: 'Username and ActorId are required.' });
         }
 
-        const existingFavoriteActor = await FavoriteActor.findOne({ username, movieId });
+        const existingFavoriteActor = await FavoriteActor.findOne({ username, actorId });
         if (existingFavoriteActor) {
-            return res.status(400).json({ message: 'This movie is already in favorite actors.' });
+            return res.status(400).json({ message: 'This actor is already in favorite actors.' });
         }
 
-        await FavoriteActor.create({ username, movieId });
+        await FavoriteActor.create({ username, actorId });
         res.status(200).json({ success: true, msg: 'Favorite actor successfully created.' });
     } catch (error) {
         console.error(error);
@@ -35,13 +35,13 @@ router.post('/:username', asyncHandler(async (req, res) => {
 router.delete('/:username', asyncHandler(async (req, res) => {
     try {
         const { username } = req.params; 
-        const { favoriteActorId } = req.body;
+        const { actorId } = req.body;
 
-        if (!username || !favoriteActorId) {
-            return res.status(400).json({ success: false, msg: 'Username and favoriteActorId are required.' });
+        if (!username || !actorId) {
+            return res.status(400).json({ success: false, msg: 'Username and actorId are required.' });
         }
 
-        const deletedFavoriteActor = await Favorite.findByIdAndDelete(favoriteActorId);
+        const deletedFavoriteActor = await FavoriteActor.findOneAndDelete({ username, actorId });
         if (!deletedFavoriteActor) {
             return res.status(404).json({ message: 'Favorite actor movie can not be found.' });
         }
